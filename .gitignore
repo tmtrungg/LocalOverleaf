@@ -1,0 +1,27 @@
+# Build artifacts
+.build/
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+
+# Output PDFs (versioned copies - keep source in git, not PDFs)
+output/
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Archives
+*.zip

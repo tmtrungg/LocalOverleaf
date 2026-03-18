@@ -1,0 +1,195 @@
+\documentclass{resume}
+
+\usepackage[left=0.5in,top=0.3in,right=0.5in,bottom=0.5in]{geometry} % Document margins
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue]{hyperref}
+\newenvironment{packeditemize}{
+	\begin{list}{$\bullet$}{
+			\setlength{\labelwidth}{4pt}
+			\setlength{\itemsep}{0pt}
+			\setlength{\leftmargin}{\labelwidth}
+			\addtolength{\leftmargin}{\labelsep}
+			\setlength{\parindent}{0pt}
+			\setlength{\listparindent}{\parindent}
+			\setlength{\parsep}{0pt}
+			\setlength{\topsep}{1pt}}}{\end{list}}
+\usepackage{enumitem}
+\usepackage{eurosym}
+
+
+
+\newcommand{\tab}[1]{\hspace{.2667\textwidth}\rlap{#1}}
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\begin{document}
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+  \textbf{\LARGE Minh Trung Tran} & {Melbourne, Australia}\\[0.5pt]
+    \href{mailto:trantrung951@gmail.com}{{{\textit{Email}}}} \space $\cdot$ \space 
+    \href{https://www.linkedin.com/in/tmtrung/}{{\textit{LinkedIn}}} \space $\cdot$ \space 
+    \href{https://github.com/tmtrungg}{{{\textit{GitHub}}}}&
+  {(+61) 432 671 522} \\
+\end{tabular*}
+
+% \begin{center}
+%     {\LARGE \textbf{Minh Trung Tran}} \\[4pt]
+%     \href{tel:+61432671522}{+61 432 671 522} \quad \textbar \quad
+%     \href{mailto:trantrung951@gmail.com}{Email} \quad \textbar \quad
+%     \href{https://www.linkedin.com/in/tmtrung/}{LinkedIn} \quad \textbar \quad
+%     \href{https://github.com/tmtrungg}{GitHub}
+% \end{center}
+
+
+
+%----------------------------------------------------------------------------------------
+%	About me
+%----------------------------------------------------------------------------------------
+% \vspace{-8pt}
+% \begin{rSection}{Summary}
+% Ph.D candidate, researcher and tech enthusiast with strong hands-on experience in machine learning, data science, and quantitative systems. Skilled in building and deploying end-to-end ML pipelines (Python, PyTorch, Scikit-learn, AWS) for fraud detection, anomaly prediction, and quantitative trading. Proven record in research and industry projects with recognition in international competitions. I'm seeking internship/graduate opportunities in data science and ML engineering to apply research expertise and engineering skills in real-world tech products.
+
+% \end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION
+%----------------------------------------------------------------------------------------
+\vspace{-8pt}
+\begin{rSection}{Education}
+{\bf Doctor of Philosophy (Ph.D) in Computer Science - RMIT University} (Australia) \hfill {12/2023 - Current}
+
+\vspace{-5pt}
+\begin{itemize}[label=·]
+    \item Research focus: Large-scale DeFi transaction pattern extraction, developing mathematical heuristics, ML models and local LLM multi-agents for anomaly transaction pattern prediction for fraud analytics in blockchains.
+\end{itemize}
+\vspace{-5pt}
+{\bf Bachelor of Computer Science and IT (Honour) - \textbf{Deakin University}} (Australia)
+\vspace{-5pt}
+ \hfill {03/2019 - 06/2023}
+
+\begin{itemize}[label=·]
+    \item Valedictorian of Computer Science graduates, First Class Honours.  \hfill {\textbf{GPA:} 4.0}
+    \vspace{-5pt}
+\end{itemize}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	Research EXPERIENCE
+%----------------------------------------------------------------------------------------
+\begin{rSection}{EXPERIENCE}
+
+{{\textbf{Software/ML Engineer}} \hfill {November 2023 - Current}}\\
+\vspace{-5pt}
+{\textit{Australian Government CRC-P Project} {\em ({\href{https://www.cooperativeresearch.org.au/resources/industry-research-grants/crc-p-grants/}{program details}})} \hfill {\em Melbourne, Australia}}
+\begin{itemize}[label=·]
+    \item Built and deployed an ML-based (scikit-learn) fraud detection system to identify cryptocurrency scams from on-chain user and token transaction histories across multiple blockchains.
+    \vspace{-5pt}
+    \item Designed end-to-end system (Python) for feature extraction, preprocessing, and model continuous retraining using Random Forest and XGBoost, achieving 93\% backtest detection accuracy across various crime schemes.
+    \vspace{-5pt}
+    \item \textbf{Technologies:} Python, Scikit-learn, XGBoost, Pandas, NumPy, PostgreSQL, Git, Linux
+
+\end{itemize}
+
+{\textbf{Applied Machine Learning Researcher}} \hfill {April 2025 - July 2025}\\
+\vspace{-5pt}
+\textit{NATO - SPS Research Programme} {\em ({\href{https://www.nato.int/cps/en/natohq/topics_85373.htm}{program details}})} \hfill {\em Melbourne, Australia (remote)}
+\begin{itemize}[label=·]
+    \item NATO-funded research program on forecasting of cyber-attack trends and mitigation technology gaps, leveraging a dataset of 18k+ incidents across 42 attack types.
+    \vspace{-5pt}
+    \item Fine-tune the existing Bayesian GNN (PyTorch) framework, building continuous retraining pipelines with new incident data, which improved attack forecasting accuracy by 7\% and reduced predictive uncertainty by 4\%.
+    \vspace{-5pt}
+    \item \textbf{Technologies:} Python, PyTorch, Bayesian GNNs, Time-Series Forecasting, Statistical Modeling, Data Engineering.
+\end{itemize}
+
+{\textbf{Software Engineer}} \hfill {June 2023 - June 2024}\\
+\vspace{-5pt}
+\textit{Nerd Labs} \hfill {\em Melbourne, Australia (remote)}
+\begin{itemize}[label=·]
+    \item Architected and implemented a signal-sending bot infrastructure (TypeScript, Redis) supporting 10K+ active users, handling and responding to real-time requests and updates across Postgres + MongoDB databases.
+    \vspace{-5pt}
+    \item Designed API handlers in TypeScript to fetch and process blockchain data across various blockchains. 
+    \vspace{-5pt}
+    \item Feature engineering, research and extract predictive features from blockchain activity (wallet flows, whale/institutional trades) to discover potential alpha signals and automated delivery of trading insights to users via the Telegram API.
+    \vspace{-5pt}
+    \item Built and maintained signal-sending application (SaaS) on AWS EC2, ensuring reliable system performance.
+    \vspace{-5pt}
+    \item \textbf{Technologies:} Python, TypeScript, Node.js, Redis, PostgreSQL, FastAPI, MongoDB, System Design, Docker, Git.
+\end{itemize}
+
+\textbf{Publication:} 
+\begin{packeditemize}
+    \vspace{-5pt}
+    \item Slow is Fast! Dissecting Ethereum’s Slow Liquidity Drain Scams. arXiv preprint arXiv:2503.04850 (first author, under review).
+    \vspace{-1pt}
+    \item Adaptive detection of DeFi SLID scam: A data-driven and industry-oriented framework for Large Scale Defi Security (AISC 2026, first author).
+    \item Chargeback fraud detection on Anonymized Merchant data: An industry case study (AISC 2026, first author).
+\end{packeditemize}
+
+\textbf{Reviewer:} 
+\begin{packeditemize}
+    \vspace{-5pt}
+    \item ACM1 Conference on Information and Knowledge Management (CIKM), 2024 (A-ranked conference).
+    \vspace{-1pt}
+    \item IEEE Transactions on Information Forensics and Security (TIFS), 2025 (Q1 journal in security).
+\end{packeditemize}
+
+\end{rSection}
+
+\begin{rSection}{HONORS \& AWARD}
+\textbf{RMIT Ph.D Cloudtech Scholarship} \hfill {\em September 2025}
+\vspace{-5pt}
+
+\textbf{2nd place national round, International Quant Championship 2025 by WorldQuant} \hfill {\em May 2025}
+\vspace{-5pt}
+
+\textbf{RMIT Ph.D CRP-P Scholarship} \hfill {\em October 2023}
+\vspace{-5pt}
+
+
+% \begin{itemize}[label=·]
+% \item Ranked \#2 in Australia among 281 participating teams in country's ranking in national round.
+% \item Developed alpha signals using quantitative research, statistical modeling, and market data analysis. Applied mathematical heuristics and performance metrics to design trading strategies within WorldQuant’s platform.
+% \end{itemize}
+
+
+\textbf{Deakin School of IT Student Excellence Award} (for department valedictorian) \hfill {\em March 2022}
+\vspace{-5pt}
+% \begin{itemize}[label=]
+% \item Award for the top 1 highest-achieving student of the School of IT in the final year based on demonstration of exemplary professional practice, leadership and standards, and/or exemplary technical innovation.
+% \end{itemize}
+
+
+\end{rSection}
+
+% \begin{rSection}{ACTIVITIES}
+
+% \textbf{AEMO - NEM Foundation Course} \hfill {\em August 2025}
+% \vspace{-5pt}
+% \begin{itemize}[label=]
+% \item Learn about AEMO, NEM and the electricity market at a high-level understanding, as both a physical power system and its financial market.
+% \end{itemize}
+% \vspace{-5pt}
+% \textbf{Akuna Capital - Options 101} \hfill {\em May 2025}
+% \vspace{-5pt}
+% \begin{itemize}[label=]
+% \item Attending program which develops hands-on experience with corfe option pricing concepts, Greeks, volatility analysis, and delta-neutral hedging strategies in quantitative finance.
+% \end{itemize}
+% \vspace{-5pt}
+% \textbf{JPMorgan Chase \& Co. - Quantitative Research Virtual Experience Program} \hfill {\em April 2025}
+% \vspace{-5pt}
+% \begin{itemize}[label=]
+% \item Developed predictive models to estimate borrower default probabilities, applied statistical methods to quantify expected credit losses and utilized dynamic programming to optimize FICO score categorization for risk modeling.
+% \end{itemize}
+% \end{rSection}
+
+\begin{rSection}{Technical Skills}
+
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+
+Programming Languages &  Python, SQL R, TypeScript (Backend), Solidity (Smart Contract). \\
+ML \& Data Science & PyTorch, NumPy, Scikit-learn, Pandas, LLM (HuggingFace, Ollama). \\
+Infrastructure \& Development Tools & Git, Docker,, Redis, PostgreSQL, Cloud (AWS EC2), FastAPI.
+
+\end{tabular}
+\end{rSection}
+
+
+
+\end{document}

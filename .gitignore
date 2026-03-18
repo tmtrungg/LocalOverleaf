@@ -1,5 +1,10 @@
 # Build artifacts
 .build/
+
+# Versioned PDF output
+output/
+
+# LaTeX auxiliary files
 *.aux
 *.log
 *.out
@@ -12,16 +17,14 @@
 *.bbl
 *.blg
 
-# Output PDFs (versioned copies - keep source in git, not PDFs)
-output/
+# Personal files (not pushed to GitHub)
+my-cv/
 
-# macOS
+# OS
 .DS_Store
+Thumbs.db
 
-# Editor
+# Editor swap files
 *.swp
 *.swo
 *~
-
-# Archives
-*.zip

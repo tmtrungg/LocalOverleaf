@@ -1,105 +1,111 @@
 #!/bin/bash
-# LocalOverleaf - Compile LaTeX project and save versioned PDF
+# LocalOverleaf - Compile LaTeX and save versioned PDF
+# https://github.com/tmtrungg/LocalOverleaf
 set -uo pipefail
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECTS_DIR="$SCRIPT_DIR/projects"
-OUTPUT_DIR="$SCRIPT_DIR/output"
-
-# Usage
-if [ $# -lt 1 ]; then
-    echo -e "${YELLOW}Usage:${NC} ./compile.sh <project_name> [--no-open]"
-    echo -e "${YELLOW}Available projects:${NC}"
-    for dir in "$PROJECTS_DIR"/*/; do
-        if [ -d "$dir" ]; then
-            name=$(basename "$dir")
-            echo "  - $name"
-        fi
-    done
-    exit 1
+# Colors (disabled if not a terminal)
+if [ -t 1 ]; then
+    RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; BOLD='\033[1m'; NC='\033[0m'
+else
+    RED=''; GREEN=''; YELLOW=''; CYAN=''; BOLD=''; NC=''
 fi
 
-PROJECT_NAME="$1"
-NO_OPEN="${2:-}"
-PROJECT_DIR="$PROJECTS_DIR/$PROJECT_NAME"
-BUILD_DIR="$PROJECT_DIR/.build"
-
-# Validate project exists
-if [ ! -d "$PROJECT_DIR" ]; then
-    echo -e "${RED}Error:${NC} Project '$PROJECT_NAME' not found in $PROJECTS_DIR"
-    exit 1
-fi
-
-# Find main .tex file
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BUILD_DIR="$ROOT_DIR/.build"
+OUTPUT_DIR="$ROOT_DIR/output"
 MAIN_TEX="main.tex"
-if [ -f "$PROJECT_DIR/.localoverleaf.conf" ]; then
-    source "$PROJECT_DIR/.localoverleaf.conf"
-fi
+NO_OPEN=false
 
-if [ ! -f "$PROJECT_DIR/$MAIN_TEX" ]; then
-    echo -e "${RED}Error:${NC} $MAIN_TEX not found in $PROJECT_DIR"
+# Parse arguments
+for arg in "$@"; do
+    case $arg in
+        --no-open) NO_OPEN=true ;;
+        --help|-h)
+            echo "LocalOverleaf - Compile LaTeX and save versioned PDFs"
+            echo ""
+            echo "Usage: ./compile.sh [options]"
+            echo ""
+            echo "Options:"
+            echo "  --no-open   Don't open the PDF after compiling"
+            echo "  --help, -h  Show this help message"
+            echo ""
+            echo "The script compiles main.tex, saves a versioned PDF in output/,"
+            echo "and keeps output/latest.pdf always pointing to the newest build."
+            exit 0
+            ;;
+    esac
+done
+
+# Check dependencies
+if ! command -v latexmk &>/dev/null && ! command -v pdflatex &>/dev/null; then
+    echo -e "${RED}Error:${NC} Neither latexmk nor pdflatex found."
+    echo "Install a TeX distribution:"
+    echo "  macOS:   brew install --cask mactex-no-gui"
+    echo "  Ubuntu:  sudo apt install texlive-full"
+    echo "  Windows: https://miktex.org/download"
     exit 1
 fi
 
-# Create build and output directories
-mkdir -p "$BUILD_DIR"
-mkdir -p "$OUTPUT_DIR"
+# Validate main.tex exists
+if [ ! -f "$ROOT_DIR/$MAIN_TEX" ]; then
+    echo -e "${RED}Error:${NC} $MAIN_TEX not found in $ROOT_DIR"
+    exit 1
+fi
 
-echo -e "${CYAN}Compiling${NC} $PROJECT_NAME/$MAIN_TEX ..."
+# Create directories
+mkdir -p "$BUILD_DIR" "$OUTPUT_DIR"
 
-# Run latexmk
-cd "$PROJECT_DIR"
-COMPILE_OUTPUT=$(latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory=.build "$MAIN_TEX" 2>&1) || true
+echo -e "${CYAN}Compiling${NC} $MAIN_TEX ..."
+
+# Compile: prefer latexmk, fall back to pdflatex
+cd "$ROOT_DIR"
+if command -v latexmk &>/dev/null; then
+    latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory=.build "$MAIN_TEX" >/dev/null 2>&1 || true
+else
+    # Run pdflatex twice for references
+    pdflatex -interaction=nonstopmode -halt-on-error -output-directory=.build "$MAIN_TEX" >/dev/null 2>&1 || true
+    pdflatex -interaction=nonstopmode -halt-on-error -output-directory=.build "$MAIN_TEX" >/dev/null 2>&1 || true
+fi
+
 PDF_FILE="$BUILD_DIR/$(basename "$MAIN_TEX" .tex).pdf"
 
-if [ -f "$PDF_FILE" ] && [ "$PDF_FILE" -nt "$PROJECT_DIR/$MAIN_TEX" ]; then
-    # Compilation succeeded — determine next version number
-    EXISTING_VERSIONS=$(ls "$OUTPUT_DIR"/${PROJECT_NAME}_v*.pdf 2>/dev/null | wc -l | tr -d ' ')
+if [ -f "$PDF_FILE" ] && [ "$PDF_FILE" -nt "$ROOT_DIR/$MAIN_TEX" ]; then
+    # Determine next version number
+    EXISTING_VERSIONS=$(ls "$OUTPUT_DIR"/v*.pdf 2>/dev/null | wc -l | tr -d ' ')
     NEXT_VERSION=$((EXISTING_VERSIONS + 1))
-
-    # Timestamp
     TIMESTAMP=$(date +"%Y-%m-%d_%H-%M")
-
-    # Versioned filename
-    VERSIONED_NAME="${PROJECT_NAME}_v${NEXT_VERSION}_${TIMESTAMP}.pdf"
+    VERSIONED_NAME="v${NEXT_VERSION}_${TIMESTAMP}.pdf"
 
     # Copy to output
     cp "$PDF_FILE" "$OUTPUT_DIR/$VERSIONED_NAME"
-    cp "$PDF_FILE" "$OUTPUT_DIR/${PROJECT_NAME}_latest.pdf"
+    cp "$PDF_FILE" "$OUTPUT_DIR/latest.pdf"
 
-    echo ""
     echo -e "${GREEN}Compiled successfully!${NC}"
-    echo -e "  Version:  ${CYAN}v${NEXT_VERSION}${NC}"
-    echo -e "  Output:   ${CYAN}output/$VERSIONED_NAME${NC}"
-    echo -e "  Latest:   ${CYAN}output/${PROJECT_NAME}_latest.pdf${NC}"
+    echo -e "  ${BOLD}v${NEXT_VERSION}${NC} -> output/$VERSIONED_NAME"
+    echo -e "  Latest -> output/latest.pdf"
 
-    # Open in Preview (macOS) unless --no-open
-    if [ "$NO_OPEN" != "--no-open" ]; then
-        open "$OUTPUT_DIR/${PROJECT_NAME}_latest.pdf"
+    # Open PDF viewer
+    if [ "$NO_OPEN" = false ]; then
+        if command -v open &>/dev/null; then
+            open "$OUTPUT_DIR/latest.pdf"                    # macOS
+        elif command -v xdg-open &>/dev/null; then
+            xdg-open "$OUTPUT_DIR/latest.pdf" &>/dev/null &  # Linux
+        elif command -v start &>/dev/null; then
+            start "$OUTPUT_DIR/latest.pdf"                   # Windows (Git Bash)
+        fi
     fi
 else
-    # Compilation failed
-    echo ""
     echo -e "${RED}Compilation failed!${NC}"
-    echo ""
 
-    # Parse log for errors
     LOG_FILE="$BUILD_DIR/$(basename "$MAIN_TEX" .tex).log"
     if [ -f "$LOG_FILE" ]; then
-        echo -e "${YELLOW}Errors:${NC}"
-        grep -n "^! " "$LOG_FILE" | while IFS= read -r line; do
+        echo ""
+        # Extract LaTeX errors with context
+        grep -A 2 "^! " "$LOG_FILE" | head -30 | while IFS= read -r line; do
             echo -e "  ${RED}$line${NC}"
         done
-
         # Show line references
-        grep -n "^l\." "$LOG_FILE" | while IFS= read -r line; do
+        grep "^l\." "$LOG_FILE" | head -10 | while IFS= read -r line; do
             echo -e "  ${YELLOW}$line${NC}"
         done
     fi

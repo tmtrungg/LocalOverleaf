@@ -1,0 +1,113 @@
+\documentclass{resume}
+
+\usepackage[left=0.5in,top=0.3in,right=0.5in,bottom=0.5in]{geometry} % Document margins
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue]{hyperref}
+\newenvironment{packeditemize}{
+	\begin{list}{$\bullet$}{
+			\setlength{\labelwidth}{4pt}
+			\setlength{\itemsep}{0pt}
+			\setlength{\leftmargin}{\labelwidth}
+			\addtolength{\leftmargin}{\labelsep}
+			\setlength{\parindent}{0pt}
+			\setlength{\listparindent}{\parindent}
+			\setlength{\parsep}{0pt}
+			\setlength{\topsep}{1pt}}}{\end{list}}
+\usepackage{enumitem}
+
+\newcommand{\tab}[1]{\hspace{.2667\textwidth}\rlap{#1}}
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\begin{document}
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+  \textbf{\LARGE Your Name} & {City, Country}\\[0.5pt]
+    \href{mailto:your.email@example.com}{{{\textit{Email}}}} \space $\cdot$ \space
+    \href{https://linkedin.com/in/yourprofile}{{\textit{LinkedIn}}} \space $\cdot$ \space
+    \href{https://github.com/yourhandle}{{{\textit{GitHub}}}}&
+  {(+00) 000 000 000} \\
+\end{tabular*}
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION
+%----------------------------------------------------------------------------------------
+\vspace{-8pt}
+\begin{rSection}{Education}
+{\bf Ph.D in Computer Science - University Name} (Country) \hfill {2023 - Present}
+
+\vspace{-5pt}
+\begin{itemize}[label=·]
+    \item Research focus: Your research area and key topics.
+\end{itemize}
+\vspace{-5pt}
+{\bf Bachelor of Science - \textbf{University Name}} (Country)
+\vspace{-5pt}
+ \hfill {2019 - 2023}
+
+\begin{itemize}[label=·]
+    \item First Class Honours.  \hfill {\textbf{GPA:} 4.0}
+    \vspace{-5pt}
+\end{itemize}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	EXPERIENCE
+%----------------------------------------------------------------------------------------
+\begin{rSection}{EXPERIENCE}
+
+{{\textbf{Job Title}} \hfill {Start Date - End Date}}\\
+\vspace{-5pt}
+{\textit{Company Name} \hfill {\em City, Country}}
+\begin{itemize}[label=·]
+    \item Describe your key achievement or responsibility with measurable impact.
+    \vspace{-5pt}
+    \item Another achievement with specific technologies used and quantifiable results.
+    \vspace{-5pt}
+    \item \textbf{Technologies:} Python, TypeScript, PostgreSQL, Docker, Git
+\end{itemize}
+
+{{\textbf{Another Job Title}} \hfill {Start Date - End Date}}\\
+\vspace{-5pt}
+{\textit{Company Name} \hfill {\em City, Country}}
+\begin{itemize}[label=·]
+    \item Key accomplishment demonstrating your skills and impact.
+    \vspace{-5pt}
+    \item \textbf{Technologies:} List relevant technologies
+\end{itemize}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	PUBLICATIONS (optional - remove if not applicable)
+%----------------------------------------------------------------------------------------
+% \textbf{Publication:}
+% \begin{packeditemize}
+%     \vspace{-5pt}
+%     \item Your Paper Title. Conference/Journal Name, Year.
+% \end{packeditemize}
+
+%----------------------------------------------------------------------------------------
+%	HONORS & AWARDS
+%----------------------------------------------------------------------------------------
+\begin{rSection}{HONORS \& AWARDS}
+\textbf{Award Name} \hfill {\em Month Year}
+\vspace{-5pt}
+
+\textbf{Another Award or Scholarship} \hfill {\em Month Year}
+\vspace{-5pt}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\begin{rSection}{Technical Skills}
+
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+
+Programming Languages &  Python, JavaScript, TypeScript, SQL, C++. \\
+Frameworks \& Libraries & React, Node.js, PyTorch, Scikit-learn, Pandas. \\
+Infrastructure \& Tools & Git, Docker, PostgreSQL, Redis, AWS, CI/CD.
+
+\end{tabular}
+\end{rSection}
+
+\end{document}

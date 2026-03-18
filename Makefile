@@ -1,68 +1,53 @@
-# LocalOverleaf Makefile
-# Usage:
-#   make                          - Compile default project
-#   make project=MyProject        - Compile specific project
-#   make watch                    - Auto-compile on file changes
-#   make commit msg="message"     - Git commit source files
-#   make list                     - List all output PDFs
-#   make clean                    - Remove build artifacts
-#   make diff                     - Show uncommitted changes
-#   make history                  - Show git log
+# LocalOverleaf - Local LaTeX compilation with versioned PDF output
+#
+# Commands:
+#   make              Compile and open PDF
+#   make watch        Auto-compile on file save
+#   make list         List all PDF versions
+#   make clean        Remove build artifacts
+#   make commit msg="message"   Git commit .tex/.cls files
+#   make diff         Show uncommitted .tex changes
+#   make history      Show git log
 
-# Default project (change this or override with: make project=X)
-project ?= CV_bigtechresearch
-
-.PHONY: all compile watch commit clean list diff history init
+.PHONY: all compile watch commit clean list diff history
 
 all: compile
 
 compile:
-	@./compile.sh $(project)
+	@./compile.sh
 
-# Auto-compile on file changes using latexmk -pvc (continuous preview)
 watch:
-	@echo "Watching $(project) for changes... (Ctrl+C to stop)"
-	@cd projects/$(project) && latexmk -pdf -pvc -interaction=nonstopmode -output-directory=.build main.tex
+	@echo "Watching for changes... (Ctrl+C to stop)"
+	@if command -v latexmk >/dev/null 2>&1; then \
+		latexmk -pdf -pvc -interaction=nonstopmode -output-directory=.build main.tex; \
+	elif command -v fswatch >/dev/null 2>&1; then \
+		fswatch -o *.tex *.cls *.sty *.bib | xargs -n1 -I{} ./compile.sh --no-open; \
+	else \
+		echo "Error: Install latexmk or fswatch for watch mode"; \
+		echo "  macOS: brew install fswatch"; \
+		exit 1; \
+	fi
 
-# Git commit source files
 commit:
 ifndef msg
 	$(error Usage: make commit msg="your commit message")
 endif
-	@git add projects/$(project)/*.tex projects/$(project)/*.cls projects/$(project)/*.sty projects/$(project)/*.bib 2>/dev/null || true
+	@git add main.tex resume.cls *.sty *.bib 2>/dev/null || true
 	@git commit -m "$(msg)"
-	@echo ""
 	@echo "Committed: $(msg)"
 
-# Remove build artifacts
 clean:
-	@echo "Cleaning build artifacts for $(project)..."
-	@rm -rf projects/$(project)/.build
+	@echo "Cleaning build artifacts..."
+	@rm -rf .build
 	@echo "Done."
 
-# Clean all projects
-clean-all:
-	@echo "Cleaning all build artifacts..."
-	@find projects -name ".build" -type d -exec rm -rf {} + 2>/dev/null || true
-	@echo "Done."
-
-# List all output PDFs
 list:
 	@echo "Output PDFs:"
 	@echo "============"
 	@ls -lh output/*.pdf 2>/dev/null || echo "  No PDFs yet. Run 'make' to compile."
 
-# Show git diff for tex files
 diff:
-	@git diff -- 'projects/$(project)/*.tex' 'projects/$(project)/*.cls'
+	@git diff -- '*.tex' '*.cls'
 
-# Show git history
 history:
 	@git log --oneline --graph -20
-
-# Initialize git repo (run once)
-init:
-	@git init
-	@git add -A
-	@git commit -m "Initial commit: LocalOverleaf setup"
-	@echo "Git repository initialized."

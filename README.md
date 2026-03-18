@@ -1,6 +1,6 @@
 # LocalOverleaf
 
-Compile LaTeX locally. Edit your `.tex` files in any editor, run one command, get a versioned PDF.
+I build a local LaTex compiler for easier Resume editing/compiling. Compile LaTeX locally. Edit `.tex` files in any editor, run one command, get a versioned PDF.
 
 No accounts, no uploads, no internet required. Your files stay on your machine.
 
